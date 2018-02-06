@@ -29,7 +29,7 @@ var port = process.env.PORT || 3000;
       console.log('body:', body); // Print the HTML for the Google homepage.
       res.json({
         body: body,
-        statusCode : response.statusCode,
+        statusCode : response,
         response : response,
         error : error
       })
