@@ -3,16 +3,13 @@ const app = express()
 const request = require("request");
 var fs = require('fs');
 
-var key = fs.readFileSync('encryption/private.key');
-var cert = fs.readFileSync( 'encryption/primary.crt' );
-var ca = fs.readFileSync( 'encryption/intermediate.crt' );
-
 var options = {
-  key: key,
-  cert: cert,
-  ca: ca
+  key: fs.readFileSync( './localhost.key' ),
+  cert: fs.readFileSync( './localhost.cert' ),
+  requestCert: false,
+  rejectUnauthorized: false
 };
-
+var port = process.env.PORT || 443;
 var https = require('https');
 
 app.use((request, response, next) => {
@@ -46,4 +43,7 @@ app.get('/', (req, res) => {
   });
 })
 
-https.createServer(options, app).listen(443);
+var server = https.createServer( options, app );
+server.listen( port, function () {
+    console.log( 'Express server listening on port ' + server.address().port );
+} );
