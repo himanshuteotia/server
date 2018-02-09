@@ -9,6 +9,8 @@ var http = require('http');
 
 
 
+
+
   app.use((request, response, next) => {
     console.log(request.headers)
     next()
@@ -45,8 +47,45 @@ var http = require('http');
       })
   })
 })
+'use strict';
 
-app.listen(3000);
+ 
+require('letsencrypt-express').create({
+ 
+  server: 'staging'
+ 
+, email: 'himanshuteotia7@gmail.com'
+ 
+, agreeTos: true
+ 
+, approveDomains: [ 'www.teotiahacker.com' ]
+ 
+, app: require('express')().use('/', function (req, res) {
+      console.log("Getting the data ... wait")
+      request.post({
+        headers: { 'content-type' : 'application/x-www-form-urlencoded' },
+        url:     'https://202.165.10.133/m2/postLogin',
+        body:    JSON.stringify({
+          "uid" : "20843287",
+          "pwd" : "abcd1234"
+        })
+      }, function (error, response, body) {
+        console.log('error:', error); // Print the error if one occurred
+        console.log('statusCode:', response); // Print the response status code if a response was received
+        console.log('body:', body); // Print the HTML for the Google homepage.
+        res.json({
+          body: body,
+          statusCode : response,
+          response : response,
+          error : error
+        })
+    })
+  })
+ 
+}).listen(80, 443);
+
+
+// app.listen(3000);
 
 
 // Create an HTTP service.
