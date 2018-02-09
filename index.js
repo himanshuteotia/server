@@ -4,6 +4,17 @@ const request = require("request");
 var fs = require('fs');
 var port = process.env.PORT || 3000;
 
+var https = require('https');
+var http = require('http');
+// This line is from the Node.js HTTPS documentation.
+var options = {
+  key: fs.readFileSync('/etc/letsencrypt/live/www.teotiahacker.com/privkey1.pem'),
+  cert: fs.readFileSync('/etc/letsencrypt/live/www.teotiahacker.com/cert1.pem')
+};
+
+
+
+
   app.use((request, response, next) => {
     console.log(request.headers)
     next()
@@ -36,4 +47,11 @@ var port = process.env.PORT || 3000;
   })
 })
 
-app.listen(3000);
+// app.listen(3000);
+
+
+// Create an HTTP service.
+http.createServer(app).listen(80);
+// Create an HTTPS service identical to the HTTP service.
+https.createServer(options, app).listen(443);
+
