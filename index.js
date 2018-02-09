@@ -21,8 +21,12 @@ var helmet = require('helmet')
     console.log("Getting the data ... wait")
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
     request.post({
-      headers: { 'content-type' : 'application/x-www-form-urlencoded' },
+      headers: { 'content-type' : 'application/json' },
       url:     'https://202.165.10.133/m2/postLogin',
+      rejectUnauthorized: true,
+      requestCert: true,//add when working with https sites
+      agent: false,      
+      secureProtocol: 'TLSv1_method',
       body:    {
         "uid" : "20843287",
         "pwd" : "abcd1234"
@@ -41,15 +45,7 @@ var helmet = require('helmet')
 
 })
 
-  var req = https.request({ 
-      host: '202.165.10.133', 
-      port: 443,
-      path: '/m2/postLogin',
-      method: 'post',
-      rejectUnauthorized: false,
-      requestCert: true,
-      agent: false
-    },
+
 
   app.use(helmet.hsts({
       maxAge: 31536000000,
@@ -70,10 +66,10 @@ var helmet = require('helmet')
 
 
 // app.listen(3000);
-http.createServer(function(req, res) {   
-        res.writeHead(301, {"Location": "https://" + req.headers['host'] + req.url});
-        res.end();
-}).listen(80);
+// http.createServer(function(req, res) {   
+//         res.writeHead(301, {"Location": "https://" + req.headers['host'] + req.url});
+//         res.end();
+// }).listen(80);
 
 https.createServer(options, app).listen(443);
 
