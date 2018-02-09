@@ -7,12 +7,7 @@ var port = process.env.PORT || 3000;
 var https = require('https');
 var http = require('http');
 
-
-var options = {
-  key: fs.readFileSync('/etc/letsencrypt/live/www.teotiahacker.com/privkey.pem'),
-  cert: fs.readFileSync('/etc/letsencrypt/live/www.teotiahacker.com/cert.pem'),
-  ca: fs.readFileSync('/etc/letsencrypt/live/www.teotiahacker.com/chain.pem')
-};
+var helmet = require('helmet')
 
 
 
@@ -48,13 +43,32 @@ var options = {
         error : error
       })
   })
+
 })
 
+  app.use(helmet.hsts({
+      maxAge: 31536000000,
+      includeSubdomains: true,
+      force: true
+}));
+
+  
+  var constants = require('constants')
+
+  var options = {
+  key: fs.readFileSync('/etc/letsencrypt/live/www.teotiahacker.com/privkey.pem'),
+  cert: fs.readFileSync('/etc/letsencrypt/live/www.teotiahacker.com/cert.pem'),
+  ca: fs.readFileSync('/etc/letsencrypt/live/www.teotiahacker.com/chain.pem'),
+  secureOptions: constants.SSL_OP_NO_SSLv3 | constants.SSL_OP_NO_SSLv2,
+  dhparam: fs.readFileSync("/etc/ssl/certs/dhparam.pem"),
+};
+
+
 // app.listen(3000);
+http.createServer(function(req, res) {   
+        res.writeHead(301, {"Location": "https://" + req.headers['host'] + req.url});
+        res.end();
+}).listen(80);
 
-
-https.createServer(options, function (req, res) {
-  res.writeHead(200);
-  res.end("hello world\n");
-}).listen(3000);
+https.createServer(options, app).listen(443);
 
