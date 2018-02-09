@@ -6,12 +6,6 @@ var port = process.env.PORT || 3000;
 
 var https = require('https');
 var http = require('http');
-// This line is from the Node.js HTTPS documentation.
-var options = {
-  key: fs.readFileSync('/etc/letsencrypt/live/www.teotiahacker.com/privkey1.pem'),
-  cert: fs.readFileSync('/etc/letsencrypt/live/www.teotiahacker.com/cert1.pem')
-};
-
 
 
 
@@ -20,6 +14,11 @@ var options = {
     next()
   })
   
+  app.get('/',(request, response, next) => {
+    console.log("Get calling");
+    response.json({"status": "running"});
+  })
+
   app.use((request, response, next) => {
     request.chance = Math.random()
     next()
