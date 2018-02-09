@@ -25,12 +25,15 @@ var helmet = require('helmet')
       url:     'https://202.165.10.133/m2/postLogin',
       rejectUnauthorized: true,
       requestCert: true,//add when working with https sites
-      agent: false,      
+      agent: true,   
+      agentOptions: {
+        ca: fs.readFileSync("/etc/letsencrypt/live/www.teotiahacker.com/chain.pem")
+      }   
       secureProtocol: 'TLSv1_method',
-      body:    {
+      body:   JSON.stringify({
         "uid" : "20843287",
         "pwd" : "abcd1234"
-      }
+      }}
     }, function (error, response, body) {
       console.log('error:', error); // Print the error if one occurred
       console.log('statusCode:', response); // Print the response status code if a response was received
