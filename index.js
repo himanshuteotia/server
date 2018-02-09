@@ -14,7 +14,7 @@ var port = process.env.PORT || 3000;
     next()
   })
   
-  app.get('/', (req, res) => {
+  app.get('/login', (req, res) => {
     console.log("Getting the data ... wait")
     request.post({
       headers: { 'content-type' : 'application/x-www-form-urlencoded' },
