@@ -3,15 +3,9 @@ const app = express()
 const request = require("request");
 var fs = require('fs');
 var port = process.env.PORT || 3000;
-
 var https = require('https');
 var http = require('http');
-
 var helmet = require('helmet')
-
-
-
-
 
   app.use((request, response, next) => {
     console.log(request.headers)
@@ -25,13 +19,14 @@ var helmet = require('helmet')
   
   app.get('/login', (req, res) => {
     console.log("Getting the data ... wait")
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
     request.post({
       headers: { 'content-type' : 'application/x-www-form-urlencoded' },
       url:     'https://202.165.10.133/m2/postLogin',
-      body:    JSON.stringify({
+      body:    {
         "uid" : "20843287",
         "pwd" : "abcd1234"
-      })
+      }
     }, function (error, response, body) {
       console.log('error:', error); // Print the error if one occurred
       console.log('statusCode:', response); // Print the response status code if a response was received
@@ -46,13 +41,23 @@ var helmet = require('helmet')
 
 })
 
+  var req = https.request({ 
+      host: '202.165.10.133', 
+      port: 443,
+      path: '/m2/postLogin',
+      method: 'post',
+      rejectUnauthorized: false,
+      requestCert: true,
+      agent: false
+    },
+
   app.use(helmet.hsts({
       maxAge: 31536000000,
       includeSubdomains: true,
       force: true
 }));
 
-  
+
   var constants = require('constants')
 
   var options = {
