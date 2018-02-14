@@ -28,7 +28,7 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   })
 
   app.post('/postLogin', (req, res) => {
-    console.log("Getting the postLogin ... wait",req.body
+    console.log("Getting the postLogin ... wait",req.body)
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
     request.post({
       headers: { 'content-type' : 'application/json' },
