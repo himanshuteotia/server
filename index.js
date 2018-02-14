@@ -17,23 +17,24 @@ var helmet = require('helmet')
     next()
   })
   
-  app.get('/login', (req, res) => {
-    console.log("Getting the data ... wait")
+  app.get('/',(req,res) => {
+    res.json({
+      "_id" : "5234532462346635"
+      "name" : "Himanshu Teotia",
+      "work" : "AI and ML Programmer ... love Javascript and Python",
+      "description" : "Still working on ...",
+      "place" : "Kuala Lampur"
+    })
+  })
+
+  app.post('/postLogin', (req, res) => {
+    console.log("Getting the postLogin ... wait",req.body)
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
     request.post({
       headers: { 'content-type' : 'application/json' },
-      url:     'https://202.165.10.133/m2/postLogin',
-      rejectUnauthorized: true,
-      requestCert: true,//add when working with https sites
-      agent: true,   
-      agentOptions: {
-        ca: fs.readFileSync("/etc/letsencrypt/live/www.teotiahacker.com/chain.pem")
-      }   
+      url:     'https://202.165.10.133/m2/postLogin',  
       secureProtocol: 'TLSv1_method',
-      body:   JSON.stringify({
-        "uid" : "20843287",
-        "pwd" : "abcd1234"
-      }}
+      body:   JSON.stringify(req.body)
     }, function (error, response, body) {
       console.log('error:', error); // Print the error if one occurred
       console.log('statusCode:', response); // Print the response status code if a response was received
@@ -45,7 +46,26 @@ var helmet = require('helmet')
         error : error
       })
   })
+})
 
+  app.post('/postHomePage', (req, res) => {
+    console.log("Getting the postHomePage ... wait",req.body)
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+    request.post({
+      headers: { 'content-type' : 'application/json' },
+      url:     'https://202.165.10.133/m2/postHomePage', 
+      body:   JSON.stringify(req.body)
+    }, function (error, response, body) {
+      console.log('error:', error); // Print the error if one occurred
+      console.log('statusCode:', response); // Print the response status code if a response was received
+      console.log('body:', body); // Print the HTML for the Google homepage.
+      res.json({
+        body: body,
+        statusCode : response,
+        response : response,
+        error : error
+      })
+  })
 })
 
 
